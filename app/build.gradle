@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.shivaraj.vidfact"
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+apply from: 'deps.gradle'
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation supportLibs
+    implementation kotlinLibs
+    implementation networkLibs
+    implementation networkLibs
+    implementation rxJavaLibs
+    implementation otherLibs
+
+    // APT dependencies
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    kapt annotationProcessorLibs
+    kaptTest daggerCompiler
+    kaptAndroidTest daggerCompiler
+
+    testImplementation unitTestLibs
+    androidTestImplementation androidTestsLibs
+    testImplementation unitTestLibs
+}
+
+tasks.matching { it instanceof Test }.all {
+    testLogging.events = ["failed", "passed", "skipped"]
+}
